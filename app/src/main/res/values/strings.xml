@@ -2,4 +2,5 @@
     <string name="app_name">Game</string>
     <string name="settings">SETTINGS</string>
     <string name="play">PLAY</string>
+    <string name="game_description">Recognize the animal!\n\nby Andream</string>
 </resources>
