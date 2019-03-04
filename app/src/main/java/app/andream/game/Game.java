@@ -155,7 +155,7 @@ public class Game {
         public int resIdInactive;
         public int index;
 
-        // TODO
+        // TODO: Add animals
         public static final String[] ANIMAL_NAMES = {
                 "bird", "cat", "fish", "honey", "house", "pig", "sun"
         };
