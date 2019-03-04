@@ -19,6 +19,15 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         roundEditor = findViewById(R.id.et_round);
         durationEditor = findViewById(R.id.et_duration);
+
+        roundEditor.setText(String.valueOf(MainActivity.GLOBAL_ROUND));
+        durationEditor.setText(String.valueOf(MainActivity.GLOBAL_DURATION));
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        MainActivity.GLOBAL_ROUND = Integer.parseInt(roundEditor.getText().toString());
+        MainActivity.GLOBAL_DURATION = Integer.parseInt(durationEditor.getText().toString());
+    }
 }

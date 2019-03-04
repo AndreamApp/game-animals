@@ -7,6 +7,9 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int GLOBAL_ROUND = 10;
+    public static int GLOBAL_DURATION = 3000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -27,7 +27,7 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
         setContentView(R.layout.activity_play);
 
         initViews();
-        game = new Game(10, 3000);
+        game = new Game(MainActivity.GLOBAL_ROUND, MainActivity.GLOBAL_DURATION);
         game.setListener(this);
         game.start();
     }
@@ -107,6 +107,5 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
     @Override
     public void finish() {
         super.finish();
-        game.stop();
     }
 }
