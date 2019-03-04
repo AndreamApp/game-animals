@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class PlayActivity extends AppCompatActivity implements Game.Listener{
 
     private ImageView[] animalViews;
-    private TextView scoreText, remainTimeText;
+    private TextView scoreText, remainTimeText, roundText;
     private Button hintBtn;
 
     private Game game;
@@ -41,6 +41,7 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
         hintBtn = findViewById(R.id.hint);
         scoreText = findViewById(R.id.score);
         remainTimeText = findViewById(R.id.remain_time);
+        roundText = findViewById(R.id.round);
 
         for(int i = 0; i < animalViews.length; i++) {
             final int finalI = i;
@@ -72,7 +73,7 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
                 animalViews[pos].setScaleY(1.0f);
                 game.nextRound();
             }
-        }, 200);
+        }, 300);
     }
 
     public void skip(View view) {
@@ -85,6 +86,7 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
             animalViews[i].setImageResource(options[i].resId);
         }
         hintBtn.setText(answer.name);
+        roundText.setText(currRound + "/" + totalRound);
     }
 
     @Override
@@ -101,11 +103,13 @@ public class PlayActivity extends AppCompatActivity implements Game.Listener{
     public void onGameEnded(int result) {
         Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
         intent.putExtra("result", result);
+        finish();
         startActivity(intent);
     }
 
     @Override
     public void finish() {
         super.finish();
+        game.cancle();
     }
 }

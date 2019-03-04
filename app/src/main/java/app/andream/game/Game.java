@@ -1,6 +1,11 @@
 package app.andream.game;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.animation.LinearInterpolator;
 
 import java.lang.reflect.Field;
 import java.util.Random;
@@ -13,6 +18,8 @@ import java.util.TimerTask;
  * Website: http://andreamapp.com
  */
 public class Game {
+
+    public static final String TAG = "Game";
 
     // the total round times of game, default is 10
     private int round;
@@ -28,8 +35,18 @@ public class Game {
     // the limit time of each round, in milliseconds
     private long roundDuration;
     private long roundStartTime;
-    private Timer timer;
     private Listener listener;
+    private Handler handler = new Handler();
+    private Runnable progressCallback = new Runnable() {
+        @Override
+        public void run() {
+            long remained = roundDuration - (System.currentTimeMillis() - roundStartTime);
+            setRoundRemain((int) remained);
+            handler.postDelayed(progressCallback, 20);
+        }
+    };
+
+    private boolean cancled;
 
     public static final int GAME_RESULT_GREAT = 1;
     public static final int GAME_RESULT_OVER = 2;
@@ -47,36 +64,44 @@ public class Game {
     public void start() {
         currRound = 0;
         score = 0;
+        Log.i(TAG, "game started");
         nextRound();
     }
 
     public void stop() {
-        if(timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+        // stop round timer
+        Log.i(TAG, "game stoped. score = " + score);
+        handler.removeCallbacks(progressCallback);
         if(listener != null) {
             listener.onGameEnded(score >= 30 ? GAME_RESULT_GREAT : GAME_RESULT_OVER);
         }
     }
 
+    public void cancle() {
+        // stop round timer
+        Log.i(TAG, "game cancled");
+        cancled = true;
+        handler.removeCallbacks(progressCallback);
+        listener = null;
+    }
+
     public boolean selectAnimal(int index) {
+        Log.i(TAG, "game selected " + index);
         boolean correct = index == animalTarget.index;
         if(correct) {
             score += 5;
             if(listener != null)
                 listener.onScoreChanged(score - 5, score);
         }
-        if(timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+        // stop round timer
+        handler.removeCallbacks(progressCallback);
         return correct;
     }
 
     public boolean nextRound() {
         if(currRound >= round) {
             stop();
+            cancle();
             return false;
         }
         Random random = new Random(System.currentTimeMillis());
@@ -93,40 +118,25 @@ public class Game {
         if(listener != null) {
             listener.onOptionsChanged(animalOptions, animalTarget, currRound, round);
         }
+        Log.i(TAG, "game round " + currRound);
 
 //        timer
         roundStartTime = System.currentTimeMillis();
-        if(timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-        final Handler handler = new Handler();
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(listener != null) {
-                    final long remained = roundDuration - (System.currentTimeMillis() - roundStartTime);
-                    if(remained < 0) {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                nextRound();
-                            }
-                        });
-                    }
-                    else {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onRoundRemainTimeChanged(remained, roundDuration);
-                            }
-                        });
-                    }
-                }
-            }
-        }, 0, 10);
+        handler.removeCallbacks(progressCallback);
+        handler.post(progressCallback);
         return true;
+    }
+
+    public void setRoundRemain(int remained) {
+        if(remained > 0) {
+            if(listener != null) {
+                listener.onRoundRemainTimeChanged(remained, roundDuration);
+            }
+        }
+        else if(!cancled){
+            Log.i(TAG, "game round expired");
+            nextRound();
+        }
     }
 
     public Listener getListener() {
