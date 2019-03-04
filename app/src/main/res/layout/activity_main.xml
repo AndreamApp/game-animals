@@ -19,7 +19,8 @@
         android:fontFamily="@font/font_one"
         android:background="@drawable/btn_selector"
         android:textColor="@color/btnTextColor"
-        android:textSize="32sp"
+        android:textSize="24sp"
+        android:onClick="toPlay"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_settings" />
@@ -36,7 +37,8 @@
         android:fontFamily="@font/font_one"
         android:background="@drawable/btn_selector"
         android:textColor="@color/btnTextColor"
-        android:textSize="32sp"
+        android:textSize="24sp"
+        android:onClick="toSettings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

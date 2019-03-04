@@ -6,7 +6,6 @@
         android:state_pressed="true" />
 
     <item
-        android:drawable="@color/btnLight"
-        />
+        android:drawable="@color/btnLight" />
 
 </selector>
