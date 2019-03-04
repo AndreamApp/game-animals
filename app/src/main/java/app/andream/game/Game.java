@@ -73,7 +73,8 @@ public class Game {
         Log.i(TAG, "game stoped. score = " + score);
         handler.removeCallbacks(progressCallback);
         if(listener != null) {
-            listener.onGameEnded(score >= 30 ? GAME_RESULT_GREAT : GAME_RESULT_OVER);
+            int threshScore = round * 3;
+            listener.onGameEnded(score >= threshScore ? GAME_RESULT_GREAT : GAME_RESULT_OVER);
         }
     }
 
