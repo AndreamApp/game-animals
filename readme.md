@@ -2,9 +2,9 @@
 
 ## Portrait
 
-![Animal demo](display/demo_portrait.gif)
+<img src="display/demo_portrait.gif" width="320" />
 
 ## Landscape
 
-![Animal demo](display/demo_landscape.gif)
+<img src="display/demo_landscape.gif" height="320" />
 
